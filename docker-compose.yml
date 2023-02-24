@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  strapi:
+    build: ./
+    depends_on:
+      - db
+
+  nginx: 
+    build: ./nginx
+    depends_on:
+      - strapi
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+      POSTGRES_DB: strapi-test
+      POSTGRES_POOL_MIN: 1
+      POSTGRES_POOL_MAX: 2
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
